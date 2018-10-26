@@ -1,5 +1,5 @@
 from socket import *
-
+bye = False
 clientSocket = socket(AF_INET, SOCK_STREAM)
 
 # Assigns IP address and port number to socket
@@ -21,5 +21,14 @@ clientSocket.send(sentence.encode())
 # Print the acknowledgement or the message the server sent back to the client.
 print(clientSocket.recv(1024).decode())
 
+sentence = None
+while bye == False:
+    print("Bob: " , clientSocket.recv(1024).decode())
+    if clientSocket.recv(1024).decode() == "Ending Session":
+        bye = True
+        print(clientSocket.recv(1024).decode())
+        break
+    sentence = input()
+    
 #Close socket
 clientSocket.close()
