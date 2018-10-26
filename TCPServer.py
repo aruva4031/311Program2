@@ -1,5 +1,7 @@
 from socket import *
-
+bye = False
+bob_count = 0
+alice_count = 0
 # Notice the use of SOCK_STREAM for TCP packets
 serverSocket = socket(AF_INET, SOCK_STREAM)
 
@@ -38,7 +40,26 @@ Alice.send(comp.encode())
 Bob.send(comp.encode())
 
 print("Sent acknowledgment to both X and Y")
+X = None
+Y = None
 
+while bye == False:
+    X = Alice.recv(1024)
+    Y = Bob.recv(1024)
+    if X is not None:
+        Bob.send(X)
+        bob_count = bob_count + 1
+    if Y is not None:
+        Alice.send(Y)
+        alice_count = alice_count + 1
+    if X.decode() == "Bye" or Y.decode() == "Bye":
+        bye = True
+        Bob.send("Ending Session")
+        Alice.send("Ending Session")
+        Bob.send("Bob Message Count: " , bob_count , " Alice Message Count: ", alice_count)
+        Alice.send("Bob Message Count: " , bob_count , " Alice Message Count: ", alice_count)
+    Y = None
+    X = None
 #close connections
 Bob.close()
 Alice.close()
