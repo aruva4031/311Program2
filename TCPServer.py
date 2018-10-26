@@ -29,7 +29,7 @@ print(X.decode())
 print(Y.decode())
 
 #checks to see which message was 1st
-comp = "Y: Bob received before X: Alice" if Y > X  else "X: Alice received before Y: Bob"
+comp = "X: Alice received before Y: Bob" if X < Y else "Y: Bob received before X: Alice"
 
 print (comp)#Print the comparison of the comparison
 
