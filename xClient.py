@@ -1,4 +1,5 @@
 from socket import *
+from select import *
 bye = False
 clientSocket = socket(AF_INET, SOCK_STREAM)
 
@@ -23,12 +24,18 @@ print(clientSocket.recv(1024).decode())
 
 sentence = None
 while bye == False:
-    print("Bob: " , clientSocket.recv(1024).decode())
+    sentence = input("Enter Message: ")
+    print(sentence)
+    clientSocket.send(sentence.encode())
+    print(clientSocket.recv(1024).decode())
+    if clientSocket.recv(1024).decode() is not None: 
+        print("Bob: " , clientSocket.recv(1024).decode())
     if clientSocket.recv(1024).decode() == "Ending Session":
         bye = True
         print(clientSocket.recv(1024).decode())
+        print(clientSocket.recv(1024).decode())
         break
-    sentence = input()
+   
     
 #Close socket
 clientSocket.close()

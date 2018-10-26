@@ -46,18 +46,24 @@ Y = None
 while bye == False:
     X = Alice.recv(1024)
     Y = Bob.recv(1024)
-    if X is not None:
+    
+   
+    if X:
+        print("Alice: " ,X.decode())
         Bob.send(X)
         bob_count = bob_count + 1
-    if Y is not None:
+    if Y:
+        print("Bob: " ,Y.decode())
         Alice.send(Y)
         alice_count = alice_count + 1
     if X.decode() == "Bye" or Y.decode() == "Bye":
         bye = True
-        Bob.send("Ending Session")
-        Alice.send("Ending Session")
-        Bob.send("Bob Message Count: " , bob_count , " Alice Message Count: ", alice_count)
-        Alice.send("Bob Message Count: " , bob_count , " Alice Message Count: ", alice_count)
+        X = "Ending Session"
+        Y = "Bob Message Count: " , bob_count , " Alice Message Count: ", alice_count
+        Bob.send(X.encode())
+        Alice.send(X.encode())
+        Bob.send(Y.encode())
+        Alice.send(Y.encode())
     Y = None
     X = None
 #close connections
