@@ -8,6 +8,7 @@ clientSocket.connect(('localhost', 12000))
 
 # Client message for the server
 sentence = 'Client Y: Bob'
+message =''
 
 # Prints the message the server sent to the client.
 print (clientSocket.recv(1024).decode())
@@ -23,17 +24,19 @@ print(clientSocket.recv(1024).decode())
 
 sentence = None
 while bye == False:
-    sentence = input("Enter Message: ")
-    print(sentence)
-    clientSocket.send(sentence.encode())
-    print(clientSocket.recv(1024).decode())
-    if clientSocket.recv(1024).decode() is not None:
-         print("Alice: " , clientSocket.recv(1024).decode())
-    if clientSocket.recv(1024).decode() == "Ending Session":
-        bye = True
-        print(clientSocket.recv(1024).decode())
-        print(clientSocket.recv(1024).decode())
-        break
+    try:
+        message = clientSocket.recvfrom(1024)
+        print("Alice: ", message.decode())
+        if message.decode() == "Ending Session":
+            bye = True
+            print(clientSocket.recv(1024).decode())
+            print(clientSocket.recv(1024).decode())
+            break
+    except:
+        sentence = input("You: ")
+        clientSocket.send(sentence.encode())
+        
+    
     
     
     

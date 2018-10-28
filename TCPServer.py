@@ -44,28 +44,39 @@ X = None
 Y = None
 
 while bye == False:
-    X = Alice.recv(1024)
-    Y = Bob.recv(1024)
-    
-   
-    if X:
-        print("Alice: " ,X.decode())
+    try:
+        X = Alice.recv(1024)
+        print("Alice: " , X.decode())
         Bob.send(X)
         bob_count = bob_count + 1
-    if Y:
+        if X.decode() == "Bye" or Y.decode() == "Bye":
+            bye = True
+            X = "Ending Session"
+            Y = "Bob Message Count: " , bob_count , " Alice Message Count: ", alice_count
+            Bob.send(X.encode())
+            Alice.send(X.encode())
+            Bob.send(Y.encode())
+            Alice.send(Y.encode())
+            break
+        
+    except:
+        pass
+    try:
+        Y = Bob.recv(1024)
         print("Bob: " ,Y.decode())
         Alice.send(Y)
         alice_count = alice_count + 1
-    if X.decode() == "Bye" or Y.decode() == "Bye":
-        bye = True
-        X = "Ending Session"
-        Y = "Bob Message Count: " , bob_count , " Alice Message Count: ", alice_count
-        Bob.send(X.encode())
-        Alice.send(X.encode())
-        Bob.send(Y.encode())
-        Alice.send(Y.encode())
-    Y = None
-    X = None
+        if X.decode() == "Bye" or Y.decode() == "Bye":
+            bye = True
+            X = "Ending Session"
+            Y = "Bob Message Count: " , bob_count , " Alice Message Count: ", alice_count
+            Bob.send(X.encode())
+            Alice.send(X.encode())
+            Bob.send(Y.encode())
+            Alice.send(Y.encode())
+            break
+    except:
+        pass
 #close connections
 Bob.close()
 Alice.close()
