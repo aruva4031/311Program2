@@ -24,16 +24,17 @@ clientSocket.send(sentence.encode())
 print(clientSocket.recv(1024).decode())
 
 sentence = None
+clientSocket.settimeout(1)
 while bye == False:
     try:
-        message = clientSocket.recvfrom(1024)
-        print("Bob: ", message.decode())
-        if message.decode() == "Ending Session":
+        message = str(clientSocket.recv(1024).decode())
+        print("Bob: ", message)
+        if message == "Ending Session":
             bye = True
             print(clientSocket.recv(1024).decode())
             print(clientSocket.recv(1024).decode())
             break
-    except:
+    except timeout:
         sentence = input("You: ")
         clientSocket.send(sentence.encode())
     

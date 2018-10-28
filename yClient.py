@@ -6,6 +6,7 @@ clientSocket = socket(AF_INET, SOCK_STREAM)
 # Connection will establish a  3-way-handshake
 clientSocket.connect(('localhost', 12000))
 
+
 # Client message for the server
 sentence = 'Client Y: Bob'
 message =''
@@ -23,16 +24,17 @@ clientSocket.send(sentence.encode())
 print(clientSocket.recv(1024).decode())
 
 sentence = None
+clientSocket.settimeout(1)
 while bye == False:
     try:
-        message = clientSocket.recvfrom(1024)
-        print("Alice: ", message.decode())
-        if message.decode() == "Ending Session":
+        message = str(clientSocket.recv(1024).decode())
+        print("Alice: ", message)
+        if message == "Ending Session":
             bye = True
             print(clientSocket.recv(1024).decode())
             print(clientSocket.recv(1024).decode())
             break
-    except:
+    except timeout:
         sentence = input("You: ")
         clientSocket.send(sentence.encode())
         
